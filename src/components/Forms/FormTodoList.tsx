@@ -7,12 +7,20 @@ import {
     Input,
   } from "@chakra-ui/react";
   import { TodoList } from "../../models/TodoList";
-  import { useState } from "react";
+  import { FC, useState } from "react";
+  import { useSetRecoilState } from "recoil";
+  import { todoState } from "../../state/toDoState";
   
-  const FormTodoList = () => {
+  interface Props {
+    onSuccess: () => void;
+  }
+  const FormTodoList: FC<Props> = ({onSuccess}) => {
+    const setState = useSetRecoilState(todoState);
+  
     const [form, setForm] = useState<TodoList>({ title: "" });
     const handleSubmit = () => {
-      
+      setState((s) => [...s, form]);
+      onSuccess();
     };
     return (
       <>
@@ -33,7 +41,9 @@ import {
                 }}
               />
             </FormControl>
-            <Button mt={4} onClick={handleSubmit}>Submit</Button>
+            <Button mt={4} onClick={handleSubmit}>
+              Submit
+            </Button>
           </CardBody>
         </Card>
       </>
